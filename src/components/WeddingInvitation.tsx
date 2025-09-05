@@ -132,33 +132,39 @@ export default function WeddingInvitation() {
     <div className="min-h-screen bg-[#f2f2f2] text-[#444444] scroll-smooth">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Background */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-110"
           style={{ backgroundImage: `url('${imgGroup897}')` }}
         />
         <div className="absolute inset-0 bg-black/20" />
-        
+
+        {/* Logo (absolute top-center) */}
+        <div 
+          className="absolute top-4 left-1/2 -translate-x-1/2 w-36 h-[109px] bg-contain bg-center bg-no-repeat z-20"
+          style={{ backgroundImage: `url('${imgVector1}')` }}
+        />
+
+        {/* Content */}
         <div className="relative z-10 text-center text-white px-4">
-          <div className="mb-8">
-            <div 
-              className="w-36 h-[109px] mx-auto bg-contain bg-center bg-no-repeat"
-              style={{ backgroundImage: `url('${imgVector1}')` }}
-            />
-          </div>
-          
           <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 font-normal italic tracking-wide px-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             You're invited to The Wedding of
           </h1>
           
           <div className="mb-8">
-            <CoupleNames />
+            <img 
+              src="src/assets/couple-names.svg" 
+              alt="Sam & Gracia" 
+              className="mx-auto w-80 sm:w-96 md:w-[28rem]" 
+            />
           </div>
-          
+
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal italic tracking-wide px-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             Saturday, 8<sup className="text-sm">th</sup> of November, 2025
           </p>
         </div>
-        
+
+        {/* Scroll button */}
         <button 
           onClick={() => document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' })}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white hover:text-gray-300 transition-colors cursor-pointer group"
@@ -172,6 +178,7 @@ export default function WeddingInvitation() {
         </button>
       </section>
 
+
       {/* Locations Section */}
       <section id="locations" className="py-16 md:py-24">
         <div className="container mx-auto px-4">
@@ -182,33 +189,48 @@ export default function WeddingInvitation() {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-0 max-w-6xl mx-auto rounded-lg overflow-hidden shadow-lg">
-            <div className="relative h-[400px] md:h-[500px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 max-w-6xl mx-auto rounded-lg overflow-hidden shadow-lg">
+            
+            {/* Ceremony */}
+            <a 
+              href="https://maps.google.com/?q=Maria+Bunda+Karmel+Church" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="relative h-[400px] md:h-[500px] group cursor-pointer"
+            >
               <div 
-                className="absolute inset-0 bg-cover bg-center"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: `url('${imgImage31}')` }}
               />
-              <div className="absolute inset-0 bg-black/40" />
-              <div className="relative z-10 bg-[#f2f2f2] md:bg-transparent p-8 md:p-12 lg:p-16 h-full flex flex-col justify-center">
-                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-4 md:text-white" style={{ fontFamily: "'Playfair Display', serif" }}>12:00</h3>
-                <p className="text-lg md:text-xl font-semibold md:text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Church of Maria Bunda Karmel</p>
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+              <div className="relative z-10 p-8 md:p-12 lg:p-16 h-full flex flex-col justify-center">
+                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-4 text-white" style={{ fontFamily: "'Playfair Display', serif" }}>12:00</h3>
+                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Maria Bunda Karmel Catholic Church</p>
               </div>
-            </div>
+            </a>
             
-            <div className="relative h-[400px] md:h-[500px]">
+            {/* Reception */}
+            <a 
+              href="https://maps.google.com/?q=Angke+Restaurant+Ketapang" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="relative h-[400px] md:h-[500px] group cursor-pointer"
+            >
               <div 
-                className="absolute inset-0 bg-cover bg-center"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: `url('${imgImage32}')` }}
               />
-              <div className="absolute inset-0 bg-black/40" />
-              <div className="relative z-10 bg-[#f2f2f2] md:bg-transparent p-8 md:p-12 lg:p-16 h-full flex flex-col justify-center md:text-right">
-                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-4 md:text-white" style={{ fontFamily: "'Playfair Display', serif" }}>19:00</h3>
-                <p className="text-lg md:text-xl font-semibold md:text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Angke Restaurant Ketapang</p>
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+              <div className="relative z-10 p-8 md:p-12 lg:p-16 h-full flex flex-col justify-center md:text-right">
+                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-4 text-white" style={{ fontFamily: "'Playfair Display', serif" }}>19:00</h3>
+                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Angke Restaurant Ketapang</p>
               </div>
-            </div>
+            </a>
+            
           </div>
         </div>
       </section>
+
 
       {/* Dress Code Section */}
       <section className="py-16 md:py-24">
@@ -291,8 +313,8 @@ export default function WeddingInvitation() {
                   </p>
 
                   <div>
-                    <Label htmlFor="name" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
-                      Your Name
+                    <Label htmlFor="name" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontWeight: 400, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"  }}>
+                      Your name
                     </Label>
                     <Input
                       id="name"
@@ -301,14 +323,14 @@ export default function WeddingInvitation() {
                       placeholder="Type your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full border-0 border-b-2 border-gray-300 rounded-none px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
+                      className="w-full border-0 border-b-2 border-gray-300 mb-4 rounded-lg px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
+                      style={{  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"  }}
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="guests" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <Label htmlFor="guests" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontWeight: 400, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"  }}>
                       How many people?
                     </Label>
                     <Input
@@ -318,15 +340,15 @@ export default function WeddingInvitation() {
                       placeholder="Enter total number of guests"
                       value={formData.guests}
                       onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-                      className="w-full border-0 border-b-2 border-gray-300 rounded-none px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
+                      className="w-full border-0 border-b-2 border-gray-300 rounded-lg px-2 py-3 mb-4 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
+                      style={{  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"  }}
                       min="1"
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="attending" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <Label htmlFor="attending" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontWeight: 400, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"  }}>
                       Will you attend?
                     </Label>
                     <Select 
@@ -334,10 +356,10 @@ export default function WeddingInvitation() {
                       onValueChange={(value) => setFormData({ ...formData, attending: value })}
                       required
                     >
-                      <SelectTrigger className="w-full border-0 border-b-2 border-gray-300 rounded-none px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      <SelectTrigger className="w-full border-0 border-b-2 border-gray-300 mb-8 rounded-lg px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors" style={{  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"  }}>
                         <SelectValue placeholder="Please choose an option" />
                       </SelectTrigger>
-                      <SelectContent style={{ fontFamily: "'Playfair Display', serif" }}>
+                      <SelectContent style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}>
                         <SelectItem value="Yes">Yes, with pleasure!</SelectItem>
                         <SelectItem value="No">No, with regrets.</SelectItem>
                       </SelectContent>
@@ -348,10 +370,10 @@ export default function WeddingInvitation() {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-zinc-900 hover:bg-zinc-700 text-white text-lg md:text-xl py-5 rounded-lg transition-all"
+                    className="w-full bg-zinc-900 hover:bg-zinc-700 space-y-4 text-white text-xl md:text-2xl py-7 rounded-lg transition-all"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
-                    Send RSVP
+                    Submit
                   </Button>
                 </form>
               </CardContent>
