@@ -1,7 +1,30 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function RSVPForm() {
   const [attending, setAttending] = useState("");
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
+      });
+
+      setStatus("success");
+      form.reset();
+      setAttending(""); // reset select state
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
 
   return (
     <section className="py-16 md:py-24">
@@ -11,11 +34,11 @@ export default function RSVPForm() {
           method="POST"
           data-netlify="true"
           netlify-honeypot="bot-field"
+          onSubmit={handleSubmit}
           className="space-y-6"
         >
-          {/* Required for Netlify to register the form */}
+          {/* Required hidden fields for Netlify */}
           <input type="hidden" name="form-name" value="rsvp" />
-          {/* Honeypot (anti-bot) */}
           <p className="hidden" aria-hidden="true">
             <label>
               Don’t fill this out: <input name="bot-field" />
@@ -55,8 +78,6 @@ export default function RSVPForm() {
             <label htmlFor="attending" className="block text-lg text-[#565656] mb-2">
               Will you attend?
             </label>
-
-            {/* EITHER use native <select> … */}
             <select
               id="attending"
               name="attending"
@@ -69,10 +90,6 @@ export default function RSVPForm() {
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
-
-            {/* If you insist on a custom Select component, keep it AND add:
-            <input type="hidden" name="attending" value={attending} />
-            so a real form value is submitted. */}
           </div>
 
           <button
@@ -82,6 +99,14 @@ export default function RSVPForm() {
             Submit
           </button>
         </form>
+
+        {/* Submission feedback */}
+        {status === "success" && (
+          <p className="mt-4 text-green-600">✅ Thank you! Your RSVP was sent.</p>
+        )}
+        {status === "error" && (
+          <p className="mt-4 text-red-600">❌ Oops! Something went wrong. Try again.</p>
+        )}
       </div>
     </section>
   );
