@@ -1,0 +1,11 @@
+.form-input {
+  border-bottom: 2px solid #aaa;
+  padding: 12px;
+  font-size: 16px;
+}
+@media (max-width: 640px) {
+  .form-input {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+}

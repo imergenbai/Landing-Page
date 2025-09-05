@@ -1,10 +1,17 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
+// NOTE: Assuming these are your UI components from a library like shadcn/ui
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { toast } from "sonner@2.0.3";
+
+// NOTE: Assuming 'sonner' is used for toast notifications
+import { toast } from "sonner";
+
+// NOTE: Assuming these are assets from your project setup
+import "./weddinginvitation.css";
 import svgPaths from "../imports/svg-4to3gamy3s";
 import imgGroup897 from "figma:asset/6a9488531aff11119fcce6c0f24f53c91faa38c0.png";
 import imgImage32 from "figma:asset/a9b7b939ae7546b66e242e814f807b1ca7e30a0e.png";
@@ -16,8 +23,7 @@ function CoupleNames() {
   return (
     <div className="flex justify-center">
       <svg 
-        className="h-auto" 
-        style={{ maxWidth: '2000px' }} 
+        className="h-auto w-full max-w-lg" 
         fill="none" 
         preserveAspectRatio="xMidYMid meet" 
         viewBox="0 0 1156 235">
@@ -31,26 +37,6 @@ function CoupleNames() {
           <path d={svgPaths.p2383ba00} fill="white" />
           <path d={svgPaths.p23313180} fill="white" />
           <path d={svgPaths.p25796080} fill="white" />
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-// Ornamental divider SVG
-function OrnamentalDivider() {
-  return (
-    <div className="flex justify-center">
-      <svg className="w-full max-w-[200px] h-auto" fill="none" preserveAspectRatio="xMidYMid meet" viewBox="0 0 144 109">
-        <g>
-          <path d={svgPaths.p29cbc480} fill="white" />
-          <path d={svgPaths.pc3fb500} fill="white" />
-          <path d={svgPaths.p4494a00} fill="white" />
-          <path d={svgPaths.p1c4fec00} fill="white" />
-          <path d={svgPaths.p4e5d80} fill="white" />
-          <path d={svgPaths.p1919e100} fill="white" />
-          <path d={svgPaths.p2fe00280} fill="white" />
-          <path d={svgPaths.p2c67a340} fill="white" />
         </g>
       </svg>
     </div>
@@ -106,6 +92,13 @@ export default function WeddingInvitation() {
     attending: ""
   });
 
+  // This function handles the form submission logic for Netlify
+  const encode = (data) => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+      .join("&");
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -113,15 +106,20 @@ export default function WeddingInvitation() {
       toast.error("Please fill in all fields");
       return;
     }
-    
-    console.log("RSVP submitted:", formData);
-    toast.success("Thank you for your RSVP! We can't wait to celebrate with you.");
-    
-    // Reset form
-    setFormData({
-      name: "",
-      guests: "",
-      attending: ""
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({ "form-name": "rsvp", ...formData })
+    })
+    .then(() => {
+        toast.success("Thank you for your RSVP! We can't wait to celebrate with you.");
+        // Reset form
+        setFormData({ name: "", guests: "", attending: "" });
+    })
+    .catch(error => {
+        toast.error("Something went wrong. Please try again.");
+        console.error(error);
     });
   };
 
@@ -134,14 +132,12 @@ export default function WeddingInvitation() {
     <div className="min-h-screen bg-[#f2f2f2] text-[#444444] scroll-smooth">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-110"
           style={{ backgroundImage: `url('${imgGroup897}')` }}
         />
         <div className="absolute inset-0 bg-black/20" />
         
-        {/* Content */}
         <div className="relative z-10 text-center text-white px-4">
           <div className="mb-8">
             <div 
@@ -163,7 +159,6 @@ export default function WeddingInvitation() {
           </p>
         </div>
         
-        {/* Scroll indicator */}
         <button 
           onClick={() => document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' })}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white hover:text-gray-300 transition-colors cursor-pointer group"
@@ -188,7 +183,6 @@ export default function WeddingInvitation() {
           </div>
           
           <div className="grid md:grid-cols-2 gap-0 max-w-6xl mx-auto rounded-lg overflow-hidden shadow-lg">
-            {/* Ceremony */}
             <div className="relative h-[400px] md:h-[500px]">
               <div 
                 className="absolute inset-0 bg-cover bg-center"
@@ -201,7 +195,6 @@ export default function WeddingInvitation() {
               </div>
             </div>
             
-            {/* Reception */}
             <div className="relative h-[400px] md:h-[500px]">
               <div 
                 className="absolute inset-0 bg-cover bg-center"
@@ -231,7 +224,6 @@ export default function WeddingInvitation() {
             <div className="text-center mb-12">
               <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>Formalwear</h3>
               
-              {/* Restricted Colors */}
               <div className="mb-8">
                 <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Restricted Colours</h4>
                 <div className="flex justify-center gap-2 flex-wrap">
@@ -245,7 +237,6 @@ export default function WeddingInvitation() {
                 </div>
               </div>
               
-              {/* Restrictions */}
               <div>
                 <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Restrictions</h4>
                 <div className="flex justify-center gap-8 md:gap-12 flex-wrap">
@@ -267,119 +258,50 @@ export default function WeddingInvitation() {
           </div>
         </div>
       </section>
-
-      <form
-  name="rsvp"
-  method="POST"
-  data-netlify="true"
-  netlify-honeypot="bot-field"
-  className="space-y-6"
->
-  {/* Required hidden input for Netlify */}
-  <input type="hidden" name="form-name" value="rsvp" />
-
-  {/* Honeypot */}
-  <p className="hidden" aria-hidden="true">
-    <label>
-      Don’t fill this out: <input name="bot-field" />
-    </label>
-  </p>
-
-  <div>
-    <Label htmlFor="name" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
-      Your Name
-    </Label>
-    <Input
-      id="name"
-      name="name"  // 🔑 added
-      type="text"
-      placeholder="Type your name"
-      value={formData.name}
-      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-      className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0"
-      style={{ fontFamily: "'Playfair Display', serif" }}
-      required
-    />
-  </div>
-  
-  <div>
-    <Label htmlFor="guests" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
-      How many people?
-    </Label>
-    <Input
-      id="guests"
-      name="guests"  // 🔑 added
-      type="number"
-      placeholder="Enter amount"
-      value={formData.guests}
-      onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-      className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0"
-      style={{ fontFamily: "'Playfair Display', serif" }}
-      min="1"
-      required
-    />
-  </div>
-  
-  <div>
-    <Label htmlFor="attending" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
-      Will you attend?
-    </Label>
-    <Select 
-      value={formData.attending} 
-      onValueChange={(value) => setFormData({ ...formData, attending: value })}
-      required
-    >
-      <SelectTrigger className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0" style={{ fontFamily: "'Playfair Display', serif" }}>
-        <SelectValue placeholder="Yes/No" />
-      </SelectTrigger>
-      <SelectContent style={{ fontFamily: "'Playfair Display', serif" }}>
-        <SelectItem value="yes">Yes</SelectItem>
-        <SelectItem value="no">No</SelectItem>
-      </SelectContent>
-    </Select>
-
-    {/* Hidden input so Netlify sees the value */}
-    <input type="hidden" name="attending" value={formData.attending} />
-  </div>
-  
-  <Button 
-    type="submit" 
-    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white text-lg md:text-xl py-6 rounded-lg"
-    style={{ fontFamily: "'Playfair Display', serif" }}
-  >
-    Submit
-  </Button>
-</form>
-
-
-      {/* RSVP Form Section */}
-      {/* {<section className="py-16 md:py-24">
+      
+      {/* --- RSVP Form Section (Corrected and Integrated) --- */}
+      <section className="py-16 md:py-24 bg-gray-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-4">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', serif" }}>Form</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', serif" }}>Kindly Respond</h2>
               <UpArrowIcon />
             </div>
           </div>
           
+          {/* This container makes the form responsive and centered */}
           <div className="max-w-2xl mx-auto">
-            <Card className="p-6 md:p-8 shadow-lg">
+            <Card className="p-6 md:p-8 shadow-2xl rounded-lg border-0">
               <CardHeader className="text-center pb-6">
                 <h3 className="text-3xl md:text-4xl font-normal italic text-zinc-900" style={{ fontFamily: "'Playfair Display', serif" }}>RSVP</h3>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form 
+                  name="rsvp"
+                  method="POST"
+                  data-netlify="true"
+                  netlify-honeypot="bot-field"
+                  onSubmit={handleSubmit} 
+                  className="space-y-8"
+                >
+                  {/* Required hidden inputs for Netlify */}
+                  <input type="hidden" name="form-name" value="rsvp" />
+                  <p className="hidden" aria-hidden="true">
+                    <label>Don’t fill this out: <input name="bot-field" /></label>
+                  </p>
+
                   <div>
                     <Label htmlFor="name" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
                       Your Name
                     </Label>
                     <Input
                       id="name"
+                      name="name"
                       type="text"
-                      placeholder="Type your name"
+                      placeholder="Type your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0"
+                      className="w-full border-0 border-b-2 border-gray-300 rounded-none px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
                       style={{ fontFamily: "'Playfair Display', serif" }}
                       required
                     />
@@ -391,11 +313,12 @@ export default function WeddingInvitation() {
                     </Label>
                     <Input
                       id="guests"
+                      name="guests"
                       type="number"
-                      placeholder="Enter amount"
+                      placeholder="Enter total number of guests"
                       value={formData.guests}
                       onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-                      className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0"
+                      className="w-full border-0 border-b-2 border-gray-300 rounded-none px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
                       style={{ fontFamily: "'Playfair Display', serif" }}
                       min="1"
                       required
@@ -411,29 +334,31 @@ export default function WeddingInvitation() {
                       onValueChange={(value) => setFormData({ ...formData, attending: value })}
                       required
                     >
-                      <SelectTrigger className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0" style={{ fontFamily: "'Playfair Display', serif" }}>
-                        <SelectValue placeholder="Yes/No" />
+                      <SelectTrigger className="w-full border-0 border-b-2 border-gray-300 rounded-none px-2 py-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        <SelectValue placeholder="Please choose an option" />
                       </SelectTrigger>
                       <SelectContent style={{ fontFamily: "'Playfair Display', serif" }}>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="Yes">Yes, with pleasure!</SelectItem>
+                        <SelectItem value="No">No, with regrets.</SelectItem>
                       </SelectContent>
                     </Select>
+                    {/* Hidden input to ensure Netlify captures the value from the custom Select component */}
+                    <input type="hidden" name="attending" value={formData.attending} />
                   </div>
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white text-lg md:text-xl py-6 rounded-lg"
+                    className="w-full bg-zinc-900 hover:bg-zinc-700 text-white text-lg md:text-xl py-5 rounded-lg transition-all"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
-                    Submit
+                    Send RSVP
                   </Button>
                 </form>
               </CardContent>
             </Card>
           </div>
         </div>
-      </section> } */}
+      </section>
     </div>
   );
 }
