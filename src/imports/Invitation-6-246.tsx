@@ -4,6 +4,7 @@ import imgVector1 from "figma:asset/9c5bd42a316516ab117bef97c62bdea84c51b0c7.png
 import img49Cad2F56D4A20217Ac2Cd9Dfa3Fcb8Ac767783C from "figma:asset/a9b7b939ae7546b66e242e814f807b1ca7e30a0e.png";
 import imgA7140452Eee719E344520Aa3Aff2Cf7A83C9Db32 from "figma:asset/ed0f06480b9d00ae68608c4c6e87d141b1989b26.png";
 
+
 function FirstSection() {
   return (
     <div className="absolute h-[837px] left-0 overflow-clip right-0 top-0" data-name="First-section">
@@ -374,149 +375,149 @@ function Frame15() {
   );
 }
 
-function Label() {
-  return (
-    <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
-      <div className="font-['PP_Editorial_Old:Italic',_sans-serif] leading-[0] not-italic relative shrink-0 text-[40px] text-nowrap text-zinc-900">
-        <p className="leading-[normal] whitespace-pre">RSVP</p>
-      </div>
-    </div>
-  );
-}
+// function Label() {
+//   return (
+//     <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
+//       <div className="font-['PP_Editorial_Old:Italic',_sans-serif] leading-[0] not-italic relative shrink-0 text-[40px] text-nowrap text-zinc-900">
+//         <p className="leading-[normal] whitespace-pre">RSVP</p>
+//       </div>
+//     </div>
+//   );
+// }
 
-function Frame80() {
-  return (
-    <div className="content-stretch flex flex-col gap-3 items-start justify-start relative shrink-0">
-      <Label />
-    </div>
-  );
-}
+// function Frame80() {
+//   return (
+//     <div className="content-stretch flex flex-col gap-3 items-start justify-start relative shrink-0">
+//       <Label />
+//     </div>
+//   );
+// }
 
-function Label1() {
-  return (
-    <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
-      <div className="font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] not-italic relative shrink-0 text-[#565656] text-[24px] text-nowrap">
-        <p className="leading-[normal] whitespace-pre">Your Name</p>
-      </div>
-    </div>
-  );
-}
+// function Label1() {
+//   return (
+//     <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
+//       <div className="font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] not-italic relative shrink-0 text-[#565656] text-[24px] text-nowrap">
+//         <p className="leading-[normal] whitespace-pre">Your Name</p>
+//       </div>
+//     </div>
+//   );
+// }
 
-function Frame82() {
-  return (
-    <div className="h-10 relative shrink-0 w-full">
-      <div className="h-10 overflow-clip relative w-full">
-        <div className="absolute font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] left-2 not-italic text-[16px] text-[lightgrey] text-nowrap top-2">
-          <p className="leading-[normal] whitespace-pre">Type your name</p>
-        </div>
-      </div>
-      <div aria-hidden="true" className="absolute border-[0px_0px_1px] border-[lightgrey] border-solid inset-0 pointer-events-none" />
-    </div>
-  );
-}
+// function Frame82() {
+//   return (
+//     <div className="h-10 relative shrink-0 w-full">
+//       <div className="h-10 overflow-clip relative w-full">
+//         <div className="absolute font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] left-2 not-italic text-[16px] text-[lightgrey] text-nowrap top-2">
+//           <p className="leading-[normal] whitespace-pre">Type your name</p>
+//         </div>
+//       </div>
+//       <div aria-hidden="true" className="absolute border-[0px_0px_1px] border-[lightgrey] border-solid inset-0 pointer-events-none" />
+//     </div>
+//   );
+// }
 
-function Label2() {
-  return (
-    <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
-      <div className="font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] not-italic relative shrink-0 text-[#565656] text-[24px] text-nowrap">
-        <p className="leading-[normal] whitespace-pre">How many people?</p>
-      </div>
-    </div>
-  );
-}
+// function Label2() {
+//   return (
+//     <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
+//       <div className="font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] not-italic relative shrink-0 text-[#565656] text-[24px] text-nowrap">
+//         <p className="leading-[normal] whitespace-pre">How many people?</p>
+//       </div>
+//     </div>
+//   );
+// }
 
-function Frame83() {
-  return (
-    <div className="h-10 relative shrink-0 w-full">
-      <div className="h-10 overflow-clip relative w-full">
-        <div className="absolute font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] left-2 not-italic text-[16px] text-[lightgrey] text-nowrap top-2">
-          <p className="leading-[normal] whitespace-pre">Enter amount</p>
-        </div>
-      </div>
-      <div aria-hidden="true" className="absolute border-[0px_0px_1px] border-[lightgrey] border-solid inset-0 pointer-events-none" />
-    </div>
-  );
-}
+// function Frame83() {
+//   return (
+//     <div className="h-10 relative shrink-0 w-full">
+//       <div className="h-10 overflow-clip relative w-full">
+//         <div className="absolute font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] left-2 not-italic text-[16px] text-[lightgrey] text-nowrap top-2">
+//           <p className="leading-[normal] whitespace-pre">Enter amount</p>
+//         </div>
+//       </div>
+//       <div aria-hidden="true" className="absolute border-[0px_0px_1px] border-[lightgrey] border-solid inset-0 pointer-events-none" />
+//     </div>
+//   );
+// }
 
-function Label3() {
-  return (
-    <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
-      <div className="font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] not-italic relative shrink-0 text-[#565656] text-[24px] text-nowrap">
-        <p className="leading-[normal] whitespace-pre">Will you attend?</p>
-      </div>
-    </div>
-  );
-}
+// function Label3() {
+//   return (
+//     <div className="content-stretch flex gap-2.5 items-center justify-center relative shrink-0" data-name="Label">
+//       <div className="font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] not-italic relative shrink-0 text-[#565656] text-[24px] text-nowrap">
+//         <p className="leading-[normal] whitespace-pre">Will you attend?</p>
+//       </div>
+//     </div>
+//   );
+// }
 
-function Frame84() {
-  return (
-    <div className="h-10 relative shrink-0 w-full">
-      <div className="h-10 overflow-clip relative w-full">
-        <div className="absolute font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] left-2 not-italic text-[16px] text-[lightgrey] text-nowrap top-2">
-          <p className="leading-[normal] whitespace-pre">Yes/No</p>
-        </div>
-      </div>
-      <div aria-hidden="true" className="absolute border-[0px_0px_1px] border-[lightgrey] border-solid inset-0 pointer-events-none" />
-    </div>
-  );
-}
+// function Frame84() {
+//   return (
+//     <div className="h-10 relative shrink-0 w-full">
+//       <div className="h-10 overflow-clip relative w-full">
+//         <div className="absolute font-['PP_Editorial_Old:Regular',_sans-serif] leading-[0] left-2 not-italic text-[16px] text-[lightgrey] text-nowrap top-2">
+//           <p className="leading-[normal] whitespace-pre">Yes/No</p>
+//         </div>
+//       </div>
+//       <div aria-hidden="true" className="absolute border-[0px_0px_1px] border-[lightgrey] border-solid inset-0 pointer-events-none" />
+//     </div>
+//   );
+// }
 
-function Frame85() {
-  return (
-    <div className="content-stretch flex flex-col gap-4 items-start justify-start relative shrink-0 w-full">
-      <Label1 />
-      <Frame82 />
-      <Label2 />
-      <Frame83 />
-      <Label3 />
-      <Frame84 />
-    </div>
-  );
-}
+// function Frame85() {
+//   return (
+//     <div className="content-stretch flex flex-col gap-4 items-start justify-start relative shrink-0 w-full">
+//       <Label1 />
+//       <Frame82 />
+//       <Label2 />
+//       <Frame83 />
+//       <Label3 />
+//       <Frame84 />
+//     </div>
+//   );
+// }
 
-function Button() {
-  return (
-    <div className="bg-zinc-900 h-14 relative rounded-[8px] shrink-0 w-full" data-name="Button">
-      <div className="flex flex-row items-center justify-center relative size-full">
-        <div className="box-border content-stretch flex gap-2.5 h-14 items-center justify-center px-4 py-3 relative w-full">
-          <div className="font-['PP_Editorial_Old:Ultrabold',_sans-serif] leading-[0] not-italic relative shrink-0 text-[24px] text-nowrap text-white">
-            <p className="leading-[normal] whitespace-pre">Submit</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+// function Button() {
+//   return (
+//     <div className="bg-zinc-900 h-14 relative rounded-[8px] shrink-0 w-full" data-name="Button">
+//       <div className="flex flex-row items-center justify-center relative size-full">
+//         <div className="box-border content-stretch flex gap-2.5 h-14 items-center justify-center px-4 py-3 relative w-full">
+//           <div className="font-['PP_Editorial_Old:Ultrabold',_sans-serif] leading-[0] not-italic relative shrink-0 text-[24px] text-nowrap text-white">
+//             <p className="leading-[normal] whitespace-pre">Submit</p>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
-function Card() {
-  return (
-    <div className="bg-white box-border content-stretch flex flex-col gap-[22px] items-start justify-start p-[24px] relative rounded-[16px] shrink-0 w-[839px]" data-name="Card">
-      <div aria-hidden="true" className="absolute border border-solid border-zinc-200 inset-0 pointer-events-none rounded-[16px]" />
-      <Frame80 />
-      <Frame85 />
-      <Button />
-    </div>
-  );
-}
+// function Card() {
+//   return (
+//     <div className="bg-white box-border content-stretch flex flex-col gap-[22px] items-start justify-start p-[24px] relative rounded-[16px] shrink-0 w-[839px]" data-name="Card">
+//       <div aria-hidden="true" className="absolute border border-solid border-zinc-200 inset-0 pointer-events-none rounded-[16px]" />
+//       <Frame80 />
+//       <Frame85 />
+//       <Button />
+//     </div>
+//   );
+// }
 
-function Frame81() {
-  return (
-    <div className="absolute box-border content-stretch flex flex-col gap-2 items-start justify-start left-1/2 px-[300px] py-0 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_2px_6px_2px_rgba(0,0,0,0.15)] top-[3358px] translate-x-[-50%] w-[1440px]">
-      <Card />
-    </div>
-  );
-}
+// function Frame81() {
+//   return (
+//     <div className="absolute box-border content-stretch flex flex-col gap-2 items-start justify-start left-1/2 px-[300px] py-0 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_2px_6px_2px_rgba(0,0,0,0.15)] top-[3358px] translate-x-[-50%] w-[1440px]">
+//       <Card />
+//     </div>
+//   );
+// }
 
-export default function Invitation() {
-  return (
-    <div className="bg-[#f2f2f2] relative size-full" data-name="Invitation">
-      <FirstSection />
-      <Frame7 />
-      <ThirdSection />
-      <Frame8 />
-      <Frame12 />
-      <Frame15 />
-      <Frame81 />
-    </div>
-  );
-}
+// export default function Invitation() {
+//   return (
+//     <div className="bg-[#f2f2f2] relative size-full" data-name="Invitation">
+//       <FirstSection />
+//       <Frame7 />
+//       <ThirdSection />
+//       <Frame8 />
+//       <Frame12 />
+//       <Frame15 />
+//       <Frame81 />
+//     </div>
+//   );
+// }
