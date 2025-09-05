@@ -268,8 +268,92 @@ export default function WeddingInvitation() {
         </div>
       </section>
 
+      <form
+  name="rsvp"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  className="space-y-6"
+>
+  {/* Required hidden input for Netlify */}
+  <input type="hidden" name="form-name" value="rsvp" />
+
+  {/* Honeypot */}
+  <p className="hidden" aria-hidden="true">
+    <label>
+      Don’t fill this out: <input name="bot-field" />
+    </label>
+  </p>
+
+  <div>
+    <Label htmlFor="name" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
+      Your Name
+    </Label>
+    <Input
+      id="name"
+      name="name"  // 🔑 added
+      type="text"
+      placeholder="Type your name"
+      value={formData.name}
+      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0"
+      style={{ fontFamily: "'Playfair Display', serif" }}
+      required
+    />
+  </div>
+  
+  <div>
+    <Label htmlFor="guests" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
+      How many people?
+    </Label>
+    <Input
+      id="guests"
+      name="guests"  // 🔑 added
+      type="number"
+      placeholder="Enter amount"
+      value={formData.guests}
+      onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
+      className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0"
+      style={{ fontFamily: "'Playfair Display', serif" }}
+      min="1"
+      required
+    />
+  </div>
+  
+  <div>
+    <Label htmlFor="attending" className="text-lg md:text-xl text-[#565656] mb-2 block" style={{ fontFamily: "'Playfair Display', serif" }}>
+      Will you attend?
+    </Label>
+    <Select 
+      value={formData.attending} 
+      onValueChange={(value) => setFormData({ ...formData, attending: value })}
+      required
+    >
+      <SelectTrigger className="border-0 border-b border-gray-300 rounded-none px-2 py-3 text-base focus:border-gray-500 focus-visible:ring-0" style={{ fontFamily: "'Playfair Display', serif" }}>
+        <SelectValue placeholder="Yes/No" />
+      </SelectTrigger>
+      <SelectContent style={{ fontFamily: "'Playfair Display', serif" }}>
+        <SelectItem value="yes">Yes</SelectItem>
+        <SelectItem value="no">No</SelectItem>
+      </SelectContent>
+    </Select>
+
+    {/* Hidden input so Netlify sees the value */}
+    <input type="hidden" name="attending" value={formData.attending} />
+  </div>
+  
+  <Button 
+    type="submit" 
+    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white text-lg md:text-xl py-6 rounded-lg"
+    style={{ fontFamily: "'Playfair Display', serif" }}
+  >
+    Submit
+  </Button>
+</form>
+
+
       {/* RSVP Form Section */}
-      <section className="py-16 md:py-24">
+      {/* {<section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-4">
@@ -349,7 +433,7 @@ export default function WeddingInvitation() {
             </Card>
           </div>
         </div>
-      </section>
+      </section> } */}
     </div>
   );
 }
