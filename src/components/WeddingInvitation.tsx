@@ -13,6 +13,7 @@ import { toast } from "sonner";
 // NOTE: Assuming these are assets from your project setup
 import "./weddinginvitation.css";
 import svgPaths from "../imports/svg-4to3gamy3s";
+import coupleNames from "../assets/couple-names.svg";
 import imgGroup897 from "figma:asset/6a9488531aff11119fcce6c0f24f53c91faa38c0.png";
 import imgImage32 from "figma:asset/a9b7b939ae7546b66e242e814f807b1ca7e30a0e.png";
 import imgImage31 from "figma:asset/ed0f06480b9d00ae68608c4c6e87d141b1989b26.png";
@@ -153,7 +154,7 @@ export default function WeddingInvitation() {
           
           <div className="mb-8">
             <img 
-              src="src/assets/couple-names.svg" 
+              src="/couple-names.svg" 
               alt="Sam & Gracia" 
               className="mx-auto w-80 sm:w-96 md:w-[28rem]" 
             />
