@@ -9,3 +9,16 @@
     margin-bottom: 8px;
   }
 }
+
+/* weddinginvitation.css */
+.btn-map {
+  display: inline-flex;
+  width: auto;
+  max-width: fit-content;
+  box-shadow: none !important; /* kill shadow */
+}
+.btn-map:focus,
+.btn-map:active {
+  outline: none !important;     /* prevent default focus outlines */
+  box-shadow: none !important;
+}
