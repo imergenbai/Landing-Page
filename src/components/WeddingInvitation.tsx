@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // UI (shadcn/ui)
 import { Button } from "./ui/button";
@@ -18,13 +18,30 @@ import imgImage32 from "figma:asset/a9b7b939ae7546b66e242e814f807b1ca7e30a0e.png
 import imgImage31 from "figma:asset/ed0f06480b9d00ae68608c4c6e87d141b1989b26.png";
 import imgVector1 from "figma:asset/9c5bd42a316516ab117bef97c62bdea84c51b0c7.png";
 
-/** Normalize imported assets to a URL string (handles figma:asset objects) */
 function getAssetUrl(a: unknown): string {
   if (!a) return "";
   if (typeof a === "string") return a;
   if (typeof a === "object" && a !== null && "src" in (a as any)) return (a as any).src as string;
   return String(a);
 }
+
+const images = [
+  "/carousel_01.jpg",
+  "/carousel_02.jpg",
+  "/carousel_03.jpg",
+  "/carousel_04.jpg",
+  "/carousel_05.jpg",
+  "/carousel_06.jpg",
+];
+
+function shuffle<T>(arr: T[]) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 
 // Decorative SVG component for the couple names
 function CoupleNames() {
@@ -104,12 +121,60 @@ const mapBtnClass =
   "transition-colors duration-300 ease-in-out";
 
 
+
+  
 export default function WeddingInvitation() {
   const heroBgUrl = getAssetUrl(imgGroup897);
   const ceremonyBgUrl = getAssetUrl(imgImage31);
   const receptionBgUrl = getAssetUrl(imgImage32);
   const logoUrl = getAssetUrl(imgVector1);
   const coupleNamesUrl = getAssetUrl(coupleNames);
+
+function shuffle<T>(arr: T[]) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+
+// start with a random order once
+const [order, setOrder] = useState(() => shuffle([...images]));
+const [idx, setIdx] = useState(0);
+
+useEffect(() => {
+  const id = setInterval(() => {
+    setIdx(prev => {
+      const next = prev + 1;
+      if (next >= order.length) {
+        // new random cycle, no repeats until all seen
+        setOrder(shuffle([...images]));
+        return 0;                     // wrap back to start
+      }
+      return next;                    // advance normally
+    });
+  }, 4000); // 4 seconds per slide
+  return () => clearInterval(id);
+}, [order.length]); // stable 4s tick; rebind only if length changes
+
+{order.map((src, i) => {
+  const active = i === idx;
+  return active ? (
+    <div
+      key={`${src}-${idx}`}   // ensures remount every tick
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none opacity-100 kb-anim transition-opacity duration-700 ease-linear"
+      style={{ backgroundImage: `url(${src})` }}
+      aria-hidden
+    />
+  ) : null; // only render the active slide
+})}
+
+
+
+
+
+
 
   const [formData, setFormData] = useState({ name: "", guests: "" });
 
@@ -140,63 +205,84 @@ export default function WeddingInvitation() {
       });
   };
 
-  const restrictedColors = ["#f6e8cb", "#f0dbc2", "#f7c5ad", "#f7e7cf", "#f7e5c6", "#f7f7f7", "#eaeaea", "#d1d5db"];
-
   return (
     <div className="min-h-screen bg-[#f2f2f2] text-[#444444] scroll-smooth">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
-          style={{ backgroundImage: heroBgUrl ? `url("${heroBgUrl}")` : undefined }}
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-black/20" aria-hidden />
+    {/* Hero Section */}
+    {/* Hero Section */}
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Slides */}
+      {order.map((src, i) => {
+        const active = i === idx;
+        if (!active) return null; // render only the active slide
 
-        {/* Logo */}
-        <div
-          style={{ width: "154px", height: "169px", backgroundImage: `url("${logoUrl}")` }}
-          className="absolute top-4 left-1/2 -translate-x-1/2 mt-12 bg-contain bg-center bg-no-repeat z-[999]"
-          aria-hidden
-        />
+        return (
+          <div
+            key={`${src}-${idx}`}                    // remount each tick
+            className="hero-slide transition-opacity duration-700 ease-linear opacity-100"
+            style={{
+              backgroundImage: `url(${src})`,
+              // IMPORTANT: no Tailwind scale-110 here
+              animation: `kb-zoom 4000ms linear forwards` // exactly 4s, matches your interval
+            }}
+            aria-hidden
+          />
+        );
+      })}
 
-        {/* Content */}
-        <div className="relative z-[100] text-center text-white px-4">
-          <h1
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 font-normal italic tracking-wide px-4"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            You're invited to the Wedding of
-          </h1>
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" aria-hidden />
 
-          <div className="mb-8">
-            <img src={coupleNamesUrl} alt="Islam & Gracia" className="mx-auto w-80 sm:w-96 md:w-[28rem]" draggable={false} />
-          </div>
+      {/* Logo */}
+      <div
+        style={{ width: "154px", height: "169px", backgroundImage: `url("${logoUrl}")` }}
+        className="absolute top-4 left-1/2 -translate-x-1/2 mt-12 bg-contain bg-center bg-no-repeat z-[999]"
+        aria-hidden
+      />
 
-          <p
-            className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal italic tracking-wide px-4"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Saturday, 8<sup className="text-sm">th</sup> of November, 2025
-          </p>
+      {/* Content */}
+      <div className="relative z-[100] text-center text-white px-4">
+        <h1
+          className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 font-normal italic tracking-wide px-4"
+          style={{ fontFamily: "'Playfair Display', serif" }}
+        >
+          You're invited to the Wedding of
+        </h1>
+
+        <div className="mb-8">
+          <img
+            src={coupleNamesUrl}
+            alt="Islam & Gracia"
+            className="mx-auto w-80 sm:w-96 md:w-[28rem]"
+            draggable={false}
+          />
         </div>
 
-        {/* Scroll button */}
-        <button
-          onClick={() => document.getElementById("locations")?.scrollIntoView({ behavior: "smooth" })}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white hover:text-gray-300 transition-colors cursor-pointer group z-[100]"
-          aria-label="Scroll to locations"
+        <p
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal italic tracking-wide px-4"
+          style={{ fontFamily: "'Playfair Display', serif" }}
         >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-sm tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Locations
-            </span>
-            <svg className="w-6 h-6 animate-bounce group-hover:animate-none transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m19 9-7 7-7-7" />
-            </svg>
-          </div>
-        </button>
-      </section>
+          Saturday, 8<sup className="text-sm">th</sup> of November, 2025
+        </p>
+      </div>
+
+      {/* Scroll button */}
+      <button
+        onClick={() => document.getElementById("locations")?.scrollIntoView({ behavior: "smooth" })}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white hover:text-gray-300 transition-colors cursor-pointer group z-[100]"
+        aria-label="Scroll to locations"
+      >
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-sm tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
+            Locations
+          </span>
+          <svg className="w-6 h-6 animate-bounce group-hover:animate-none transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m19 9-7 7-7-7" />
+          </svg>
+        </div>
+      </button>
+    </section>
+
+
 
       
 

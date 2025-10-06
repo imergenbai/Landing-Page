@@ -22,3 +22,18 @@
   outline: none !important;     /* prevent default focus outlines */
   box-shadow: none !important;
 }
+/* weddinginvitation.css */
+@keyframes kb-zoom {
+  from { transform: scale(1.05); }  /* subtle start */
+  to   { transform: scale(1.18); }  /* end zoom */
+}
+
+.hero-slide {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
