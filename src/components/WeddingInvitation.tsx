@@ -243,7 +243,7 @@ useEffect(() => {
       <div className="relative z-[100] text-center text-white px-4">
         <h1
           className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 font-normal italic tracking-wide px-4"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
         >
           You're invited to the Wedding of
         </h1>
@@ -259,7 +259,7 @@ useEffect(() => {
 
         <p
           className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal italic tracking-wide px-4"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
         >
           Saturday, 8<sup className="text-sm">th</sup> of November, 2025
         </p>
@@ -272,7 +272,7 @@ useEffect(() => {
         aria-label="Scroll to locations"
       >
         <div className="flex flex-col items-center gap-2">
-          <span className="text-sm tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <span className="text-sm tracking-wider" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}>
             Locations
           </span>
           <svg className="w-6 h-6 animate-bounce group-hover:animate-none transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -291,7 +291,7 @@ useEffect(() => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-2">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                 Locations
               </h2>
               <UpArrowIcon />
@@ -312,10 +312,10 @@ useEffect(() => {
               {/* Content */}
               <div className="relative z-[1] p-8 md:p-12 lg:p-16 h-full
                 flex flex-col justify-center items-center md:items-start gap-8">
-                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   12:00
                 </h3>
-                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   Maria Bunda Karmel Catholic Church
                 </p>
                 <a
@@ -323,7 +323,7 @@ useEffect(() => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${mapBtnClass} btn-map`}
-                  style={{ fontFamily: "'Playfair Display', serif" }}
+                  style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}
                 >
                   Open Map
                 </a>
@@ -353,10 +353,10 @@ useEffect(() => {
               <div className="relative z-[1] p-8 md:p-12 lg:p-16 h-full
                 flex flex-col justify-center items-center md:items-end gap-8
                 text-center md:text-right">
-                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   19:00
                 </h3>
-                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   Angke Restaurant Ketapang
                 </p>
                 <div className="flex justify-end">
@@ -365,7 +365,7 @@ useEffect(() => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${mapBtnClass} btn-map self-center md:self-end`}
-                  style={{ fontFamily: "'Playfair Display', serif" }}
+                  style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}
                 >
                   Open Map
                 </a>
@@ -393,7 +393,7 @@ useEffect(() => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-4">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                 Dress Code
               </h2>
               <UpArrowIcon />
@@ -402,39 +402,39 @@ useEffect(() => {
 
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h3 className="text-6xl md:text-7xl lg:text-8xl font-light mb-8" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                 Formalwear
               </h3>
 
               <div className="mb-8">
-                <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   Restricted Colours
                 </h4>
-                <div className="text-base md:text-lg mb-4 px-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <div className="text-base md:text-lg mb-4 px-4" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   No Champagne or White.
                 </div>
               </div>
 
               <div>
-                <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   Restrictions
                 </h4>
                 <div className="flex justify-center gap-8 md:gap-12 flex-wrap">
                   <div className="flex items-center gap-3">
                     <TShirtIcon />
-                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                       No T-Shirts
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <ShortsIcon />
-                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                       No Shorts
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <SneakerIcon />
-                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                       No Sneakers
                     </span>
                   </div>
@@ -450,7 +450,7 @@ useEffect(() => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-4">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                 Kindly Respond
               </h2>
               <UpArrowIcon />
@@ -460,7 +460,7 @@ useEffect(() => {
           <div className="max-w-2xl mx-auto">
             <Card className="p-6 md:p-8 shadow-2xl rounded-lg border-0">
               <CardHeader className="text-center pb-6">
-                <h3 className="text-3xl md:text-4xl font-normal italic text-zinc-900" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h3 className="text-3xl md:text-4xl font-normal italic text-zinc-900" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   RSVP
                 </h3>
               </CardHeader>
@@ -547,7 +547,7 @@ useEffect(() => {
                   <Button
                     type="submit"
                     className="w-full bg-zinc-900 hover:bg-zinc-700 text-white text-xl md:text-2xl rounded-lg h-[160px] transition-colors duration-300 ease-in-out"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
+                    style={{ fontFamily: "'-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}
                   >
                     Submit
                   </Button>
