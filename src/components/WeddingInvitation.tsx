@@ -12,11 +12,7 @@ import { toast } from "sonner";
 // Styles & assets
 import "./weddinginvitation.css";
 import svgPaths from "../imports/svg-4to3gamy3s";
-import coupleNames from "../assets/couple-names.svg";
-import imgGroup897 from "figma:asset/6a9488531aff11119fcce6c0f24f53c91faa38c0.png";
-import imgImage32 from "figma:asset/a9b7b939ae7546b66e242e814f807b1ca7e30a0e.png";
-import imgImage31 from "figma:asset/ed0f06480b9d00ae68608c4c6e87d141b1989b26.png";
-import imgVector1 from "figma:asset/9c5bd42a316516ab117bef97c62bdea84c51b0c7.png";
+// ⬇️ removed file imports; everything now comes from /public
 
 function getAssetUrl(a: unknown): string {
   if (!a) return "";
@@ -34,6 +30,7 @@ const images = [
   "/carousel_06.jpg",
 ];
 
+
 function shuffle<T>(arr: T[]) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -41,7 +38,6 @@ function shuffle<T>(arr: T[]) {
   }
   return arr;
 }
-
 
 // Decorative SVG component for the couple names
 function CoupleNames() {
@@ -87,93 +83,85 @@ function UpArrowIcon() {
   );
 }
 
-// Icon components for dress code restrictions
-function TShirtIcon() {
-  return (
-    <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32" aria-hidden>
-      <path d={svgPaths.p11042520} fill="currentColor" />
-    </svg>
-  );
-}
-
-function SneakerIcon() {
-  return (
-    <svg className="w-8 h-8" fill="none" viewBox="0 0 32 32" aria-hidden>
-      <path d={svgPaths.p2a45d680} fill="currentColor" />
-    </svg>
-  );
-}
-
-function ShortsIcon() {
-  return (
-    <svg className="w-8 h-8" fill="none" viewBox="0 0 29 29" aria-hidden>
-      <path d={svgPaths.p2c8a3780} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-      <path d={svgPaths.p32b03f80} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-    </svg>
-  );
-}
-
 // replace your mapBtnClass with:
 const mapBtnClass =
   "inline-flex items-center justify-center w-auto max-w-fit px-6 py-3 rounded-md " +
-  "bg-white text-black text-base font-medium " +         // solid white, black text
-  "hover:bg-gray-100 active:bg-gray-200 " +              // natural hover/active shades
+  "bg-white text-black text-base font-medium " + // solid white, black text
+  "hover:bg-gray-100 active:bg-gray-200 " + // natural hover/active shades
   "transition-colors duration-300 ease-in-out";
 
-
-
-  
 export default function WeddingInvitation() {
-  const heroBgUrl = getAssetUrl(imgGroup897);
-  const ceremonyBgUrl = getAssetUrl(imgImage31);
-  const receptionBgUrl = getAssetUrl(imgImage32);
-  const logoUrl = getAssetUrl(imgVector1);
-  const coupleNamesUrl = getAssetUrl(coupleNames);
+  // ⬇️ all asset refs now come from /public
+  const ceremonyBgUrl = "/maria.png";
+  const receptionBgUrl = "/reception.png";
+  const logoUrl = "/sglogo.png";
+  const coupleNamesUrl = "/couple-names.svg";
 
-function shuffle<T>(arr: T[]) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  // start with a random order once
+  const [order, setOrder] = useState(() => shuffle([...images]));
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIdx((prev) => {
+        const next = prev + 1;
+        if (next >= order.length) {
+          setOrder(shuffle([...images])); // new random cycle
+          return 0;
+        }
+        return next;
+      });
+    }, 4000);
+    return () => clearInterval(id);
+  }, [order.length]);
+
+  {
+    order.map((src, i) => {
+      const active = i === idx;
+      return active ? (
+        <div
+          key={`${src}-${idx}`}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none opacity-100 kb-anim transition-opacity duration-700 ease-linear"
+          style={{ backgroundImage: `url(${src})` }}
+          aria-hidden
+        />
+      ) : null;
+    });
   }
-  return arr;
-}
 
+  // right after your idx/order state:
+const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
-// start with a random order once
-const [order, setOrder] = useState(() => shuffle([...images]));
-const [idx, setIdx] = useState(0);
+// load all once (fast networks) OR comment this out if you prefer just-in-time prefetch
+useEffect(() => {
+  images.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => setLoaded((m) => ({ ...m, [src]: true }));
+  });
+}, []);
 
+// always prefetch the next slide
+useEffect(() => {
+  const next = order[(idx + 1) % order.length];
+  if (!loaded[next]) {
+    const img = new Image();
+    img.src = next;
+    img.onload = () => setLoaded((m) => ({ ...m, [next]: true }));
+  }
+}, [idx, order, loaded]);
+
+// when rendering slide, only advance when the next is ready
 useEffect(() => {
   const id = setInterval(() => {
-    setIdx(prev => {
-      const next = prev + 1;
-      if (next >= order.length) {
-        // new random cycle, no repeats until all seen
-        setOrder(shuffle([...images]));
-        return 0;                     // wrap back to start
-      }
-      return next;                    // advance normally
-    });
-  }, 4000); // 4 seconds per slide
+    const next = (idx + 1) % order.length;
+    const nextSrc = order[next];
+    // if next image isn’t ready yet, skip this tick
+    if (!loaded[nextSrc]) return;
+    setIdx(next);
+  }, 4000);
   return () => clearInterval(id);
-}, [order.length]); // stable 4s tick; rebind only if length changes
-
-{order.map((src, i) => {
-  const active = i === idx;
-  return active ? (
-    <div
-      key={`${src}-${idx}`}   // ensures remount every tick
-      className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none opacity-100 kb-anim transition-opacity duration-700 ease-linear"
-      style={{ backgroundImage: `url(${src})` }}
-      aria-hidden
-    />
-  ) : null; // only render the active slide
-})}
-
-
-
-
-
+}, [idx, order, loaded]);
 
 
   const [formData, setFormData] = useState({ name: "", guests: "" });
@@ -207,84 +195,84 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-[#f2f2f2] text-[#444444] scroll-smooth">
-    {/* Hero Section */}
-    {/* Hero Section */}
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Slides */}
-      {order.map((src, i) => {
-        const active = i === idx;
-        if (!active) return null; // render only the active slide
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Slides */}
+        {order.map((src, i) => {
+          const active = i === idx;
+          if (!active) return null;
 
-        return (
-          <div
-            key={`${src}-${idx}`}                    // remount each tick
-            className="hero-slide transition-opacity duration-700 ease-linear opacity-100"
-            style={{
-              backgroundImage: `url(${src})`,
-              // IMPORTANT: no Tailwind scale-110 here
-              animation: `kb-zoom 4000ms linear forwards` // exactly 4s, matches your interval
-            }}
-            aria-hidden
-          />
-        );
-      })}
+          return (
+            <div
+              key={`${src}-${idx}`}
+              className="hero-slide transition-opacity duration-700 ease-linear opacity-100"
+              style={{
+                backgroundImage: `url(${src})`,
+                animation: `kb-zoom 4000ms linear forwards`,
+              }}
+              aria-hidden
+            />
+          );
+        })}
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/20 pointer-events-none" aria-hidden />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/20 pointer-events-none" aria-hidden />
 
-      {/* Logo */}
-      <div
-        style={{ width: "154px", height: "169px", backgroundImage: `url("${logoUrl}")` }}
-        className="absolute top-4 left-1/2 -translate-x-1/2 mt-12 bg-contain bg-center bg-no-repeat z-[999]"
-        aria-hidden
-      />
+        {/* Logo */}
+        <div
+          style={{ width: "154px", height: "169px", backgroundImage: `url("${logoUrl}")` }}
+          className="absolute top-4 left-1/2 -translate-x-1/2 mt-12 bg-contain bg-center bg-no-repeat z-[999]"
+          aria-hidden
+        />
 
-      {/* Content */}
-      <div className="relative z-[100] text-center text-white px-4">
-        <h1
-          className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 font-normal italic tracking-wide px-4"
-          style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
-        >
-          You're invited to the Wedding of
-        </h1>
+        {/* Content */}
+        <div className="relative z-[100] text-center text-white px-4">
+          <h1
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 font-normal italic tracking-wide px-4"
+            style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+          >
+            You're invited to the Wedding of
+          </h1>
 
-        <div className="mb-8">
-          <img
-            src={coupleNamesUrl}
-            alt="Islam & Gracia"
-            className="mx-auto w-80 sm:w-96 md:w-[28rem]"
-            draggable={false}
-          />
+          <div className="mb-8">
+            <img
+              src={coupleNamesUrl}
+              alt="Islam & Gracia"
+              className="mx-auto w-80 sm:w-96 md:w-[28rem]"
+              draggable={false}
+            />
+          </div>
+
+          <p
+            className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal italic tracking-wide px-4"
+            style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+          >
+            Saturday, 8<sup className="text-sm">th</sup> of November, 2025
+          </p>
         </div>
 
-        <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal italic tracking-wide px-4"
-          style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+        {/* Scroll button */}
+        <button
+          onClick={() => document.getElementById("locations")?.scrollIntoView({ behavior: "smooth" })}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white hover:text-gray-300 transition-colors cursor-pointer group z-[100]"
+          aria-label="Scroll to locations"
         >
-          Saturday, 8<sup className="text-sm">th</sup> of November, 2025
-        </p>
-      </div>
-
-      {/* Scroll button */}
-      <button
-        onClick={() => document.getElementById("locations")?.scrollIntoView({ behavior: "smooth" })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white hover:text-gray-300 transition-colors cursor-pointer group z-[100]"
-        aria-label="Scroll to locations"
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-sm tracking-wider" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}>
-            Locations
-          </span>
-          <svg className="w-6 h-6 animate-bounce group-hover:animate-none transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m19 9-7 7-7-7" />
-          </svg>
-        </div>
-      </button>
-    </section>
-
-
-
-      
+          <div className="flex flex-col items-center gap-2">
+            <span
+              className="text-sm tracking-wider"
+              style={{
+                fontFamily:
+                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+              }}
+            >
+              Locations
+            </span>
+            <svg className="w-6 h-6 animate-bounce group-hover:animate-none transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m19 9-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+      </section>
 
       {/* Locations Section */}
       <section id="locations" className="py-16 md:py-24">
@@ -310,20 +298,37 @@ useEffect(() => {
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" aria-hidden />
 
               {/* Content */}
-              <div className="relative z-[1] p-8 md:p-12 lg:p-16 h-full
-                flex flex-col justify-center items-center md:items-start gap-8">
-                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+              <div
+                className="relative z-[1] h-full p-8 md:p-12 lg:p-16
+                          flex flex-col justify-center items-center md:items-start gap-6
+                          text-center md:text-left"
+              >
+                <h3
+                  className="font-light text-white leading-none tracking-tight"
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
+                    fontSize: "clamp(5rem, 12vw, 6rem)",
+                  }}
+                >
                   12:00
                 </h3>
-                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+
+                <p
+                  className="text-base md:text-lg lg:text-xl font-semibold text-white text-center md:text-left"
+                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                >
                   Maria Bunda Karmel Catholic Church
                 </p>
+
                 <a
                   href="https://maps.google.com/?q=Maria+Bunda+Karmel+Church"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${mapBtnClass} btn-map`}
-                  style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}
+                  className={`${mapBtnClass} btn-map self-center md:self-start`}
+                  style={{
+                    fontFamily:
+                      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+                  }}
                 >
                   Open Map
                 </a>
@@ -343,6 +348,7 @@ useEffect(() => {
 
             {/* Reception card */}
             <div className="relative h-[400px] md:h-[500px] group">
+              {/* Background */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: receptionBgUrl ? `url("${receptionBgUrl}")` : undefined }}
@@ -350,28 +356,44 @@ useEffect(() => {
               />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" aria-hidden />
 
-              <div className="relative z-[1] p-8 md:p-12 lg:p-16 h-full
-                flex flex-col justify-center items-center md:items-end gap-8
-                text-center md:text-right">
-                <h3 className="text-6xl md:text-7xl lg:text-8xl font-light text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+              {/* Content */}
+              <div
+                className="relative z-[1] h-full p-8 md:p-12 lg:p-16
+                          flex flex-col justify-center items-center md:items-end gap-6
+                          text-center md:text-right"
+              >
+                <h3
+                  className="font-light text-white leading-none tracking-tight"
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
+                    fontSize: "clamp(5rem, 12vw, 6rem)",
+                  }}
+                >
                   19:00
                 </h3>
-                <p className="text-lg md:text-xl font-semibold text-white" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+
+                <p
+                  className="text-base md:text-lg lg:text-xl font-semibold text-white text-center md:text-right"
+                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                >
                   Angke Restaurant Ketapang
                 </p>
-                <div className="flex justify-end">
+
                 <a
                   href="https://www.google.com/maps/place/Angke+Restaurant+-+Ketapang/@-6.1621017,106.8104843,4452m/data=!3m1!1e3!4m6!3m5!1s0x2e69f6758d7769d5:0x3a72f6d89bf44ba4!8m2!3d-6.1599069!4d106.8167709!16s%2Fg%2F1tsw5cx0?entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${mapBtnClass} btn-map self-center md:self-end`}
-                  style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}
+                  style={{
+                    fontFamily:
+                      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+                  }}
                 >
                   Open Map
                 </a>
               </div>
-              </div>
 
+              {/* Full-card click target */}
               <a
                 href="https://maps.google.com/?q=Angke+Restaurant+Ketapang"
                 target="_blank"
@@ -385,8 +407,6 @@ useEffect(() => {
           </div>
         </div>
       </section>
-
-
 
       {/* Dress Code Section */}
       <section className="py-16 md:py-24">
@@ -411,7 +431,7 @@ useEffect(() => {
                   Restricted Colours
                 </h4>
                 <div className="text-base md:text-lg mb-4 px-4" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
-                  No Champagne or White.
+                  No Gold, Champagne or White.
                 </div>
               </div>
 
@@ -419,24 +439,21 @@ useEffect(() => {
                 <h4 className="text-xl md:text-2xl font-semibold mb-6" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
                   Restrictions
                 </h4>
+
                 <div className="flex justify-center gap-8 md:gap-12 flex-wrap">
                   <div className="flex items-center gap-3">
-                    <TShirtIcon />
-                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
-                      No T-Shirts
-                    </span>
+                    <img src="/icons/tshirt.svg" alt="T-Shirt" className="w-8 h-8" />
+                    <span className="text-base md:text-lg">No T-Shirts</span>
                   </div>
+
                   <div className="flex items-center gap-3">
-                    <ShortsIcon />
-                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
-                      No Shorts
-                    </span>
+                    <img src="/icons/shorts.svg" alt="Shorts" className="w-8 h-8" />
+                    <span className="text-base md:text-lg">No Shorts</span>
                   </div>
+
                   <div className="flex items-center gap-3">
-                    <SneakerIcon />
-                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
-                      No Sneakers
-                    </span>
+                    <img src="/icons/sneakers.svg" alt="Sneaker" className="w-8 h-8" />
+                    <span className="text-base md:text-lg">No Sneakers</span>
                   </div>
                 </div>
               </div>
@@ -495,14 +512,14 @@ useEffect(() => {
                     </Label>
                     <Input
                       id="name"
-                      name="name" // Netlify needs this
+                      name="name"
                       type="text"
                       placeholder="Type full name(s)"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full border-0 border-b-2 border-gray-300 mb-6 rounded-lg px-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
                       style={{
-                        height: 40, // hard override to ensure taller field
+                        height: 40,
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
                       }}
@@ -525,14 +542,14 @@ useEffect(() => {
                     </Label>
                     <Input
                       id="guests"
-                      name="guests" // Netlify needs this
+                      name="guests"
                       type="number"
                       placeholder="Enter total number of guests"
                       value={formData.guests}
                       onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
                       className="w-full border-0 border-b-2 border-gray-300 rounded-lg px-3 mb-8 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
                       style={{
-                        height: 40, // hard override
+                        height: 40,
                         fontFamily:
                           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
                       }}
@@ -547,7 +564,10 @@ useEffect(() => {
                   <Button
                     type="submit"
                     className="w-full bg-zinc-900 hover:bg-zinc-700 text-white text-xl md:text-2xl rounded-lg h-[160px] transition-colors duration-300 ease-in-out"
-                    style={{ fontFamily: "'-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" }}
+                    style={{
+                      fontFamily:
+                        "'-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+                    }}
                   >
                     Submit
                   </Button>
