@@ -371,7 +371,7 @@ useEffect(() => {
                 <p
                   className="text-base md:text-lg lg:text-xl font-regular text-white text-center md:text-right"
                   style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
-                  Reception
+                  Wedding Reception
                   </p>
                 <h3
                   className="font-light text-white leading-none tracking-tight"
