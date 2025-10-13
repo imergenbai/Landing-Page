@@ -303,15 +303,21 @@ useEffect(() => {
                           flex flex-col justify-center items-center md:items-start gap-6
                           text-center md:text-left"
               >
-                <h3
-                  className="font-light text-white leading-none tracking-tight"
-                  style={{
-                    fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
-                    fontSize: "clamp(5rem, 12vw, 6rem)",
-                  }}
-                >
-                  12:00
-                </h3>
+                <p
+                  className="text-base md:text-lg lg:text-xl font-regular text-white text-center md:text-right"
+                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+                  Holy Matrimony
+                  </p>
+                    <h3
+                      className="font-light text-white tracking-tight leading-none"
+                      style={{
+                        fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
+                        fontSize: "clamp(5rem, 12vw, 6rem)",
+                      }}
+                    >
+                      12:00
+                    </h3>
+
 
                 <p
                   className="text-base md:text-lg lg:text-xl font-semibold text-white text-center md:text-left"
@@ -362,6 +368,11 @@ useEffect(() => {
                           flex flex-col justify-center items-center md:items-end gap-6
                           text-center md:text-right"
               >
+                <p
+                  className="text-base md:text-lg lg:text-xl font-regular text-white text-center md:text-right"
+                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+                  Reception
+                  </p>
                 <h3
                   className="font-light text-white leading-none tracking-tight"
                   style={{
@@ -443,17 +454,17 @@ useEffect(() => {
                 <div className="flex justify-center gap-8 md:gap-12 flex-wrap">
                   <div className="flex items-center gap-3">
                     <img src="/icons/tshirt.svg" alt="T-Shirt" className="w-8 h-8" />
-                    <span className="text-base md:text-lg">No T-Shirts</span>
+                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>No T-Shirts</span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <img src="/icons/shorts.svg" alt="Shorts" className="w-8 h-8" />
-                    <span className="text-base md:text-lg">No Shorts</span>
+                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>No Shorts</span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <img src="/icons/sneakers.svg" alt="Sneaker" className="w-8 h-8" />
-                    <span className="text-base md:text-lg">No Sneakers</span>
+                    <span className="text-base md:text-lg" style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>No Sneakers</span>
                   </div>
                 </div>
               </div>
