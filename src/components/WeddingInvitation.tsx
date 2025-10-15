@@ -157,9 +157,9 @@ export default function WeddingInvitation() {
       return;
     }
 
-    // Submit to Netlify
+    // Submit to Netlify (NEW FORM NAME)
     const payload = {
-      "form-name": "rsvp",
+      "form-name": "rsvp-2025",
       name: name.trim(),
       attendMatrimony: attendMatrimony ? "Yes" : "No",
       matrimonyCount: attendMatrimony ? String(matrimonyCount) : "",
@@ -191,7 +191,7 @@ export default function WeddingInvitation() {
   return (
     <div className="min-h-screen bg-[#f2f2f2] text-[#444444] scroll-smooth">
       {/* -------- Hidden registration form for Netlify (ensures form exists at build) -------- */}
-      <form name="rsvp" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true">
+      <form name="rsvp-2025" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true">
         <input type="text" name="name" />
         <input type="text" name="attendMatrimony" />
         <input type="text" name="matrimonyCount" />
@@ -479,14 +479,14 @@ export default function WeddingInvitation() {
 
               <CardContent>
                 <form
-                  name="rsvp"
+                  name="rsvp-2025"
                   method="POST"
                   data-netlify="true"
                   netlify-honeypot="bot-field"
                   onSubmit={handleSubmit}
                   className="space-y-8"
                 >
-                  <input type="hidden" name="form-name" value="rsvp" />
+                  <input type="hidden" name="form-name" value="rsvp-2025" />
                   <p className="hidden" aria-hidden>
                     <label>
                       Don’t fill this out: <input name="bot-field" />
