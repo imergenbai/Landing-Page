@@ -12,14 +12,8 @@ import { toast } from "sonner";
 // Styles & assets
 import "./weddinginvitation.css";
 import svgPaths from "../imports/svg-4to3gamy3s";
-// ⬇️ removed file imports; everything now comes from /public
 
-function getAssetUrl(a: unknown): string {
-  if (!a) return "";
-  if (typeof a === "string") return a;
-  if (typeof a === "object" && a !== null && "src" in (a as any)) return (a as any).src as string;
-  return String(a);
-}
+/* -------------------- Utilities -------------------- */
 
 const images = [
   "/carousel_01.jpg",
@@ -30,7 +24,6 @@ const images = [
   "/carousel_06.jpg",
 ];
 
-
 function shuffle<T>(arr: T[]) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -39,35 +32,16 @@ function shuffle<T>(arr: T[]) {
   return arr;
 }
 
-// Decorative SVG component for the couple names
-function CoupleNames() {
-  return (
-    <div className="flex justify-center">
-      <svg
-        className="h-auto w-full max-w-lg"
-        fill="none"
-        preserveAspectRatio="xMidYMid meet"
-        viewBox="0 0 1156 235"
-        role="img"
-        aria-label="Couple names"
-      >
-        <g>
-          <path d={svgPaths.p359ecd00} fill="white" />
-          <path d={svgPaths.p3caa2200} fill="white" />
-          <path d={svgPaths.p362ca700} fill="white" />
-          <path d={svgPaths.p10037c00} fill="white" />
-          <path d={svgPaths.pf9e8200} fill="white" />
-          <path d={svgPaths.p5723e00} fill="white" />
-          <path d={svgPaths.p2383ba00} fill="white" />
-          <path d={svgPaths.p23313180} fill="white" />
-          <path d={svgPaths.p25796080} fill="white" />
-        </g>
-      </svg>
-    </div>
-  );
+// simple URL helper (kept, in case you swap back to imported assets later)
+function getAssetUrl(a: unknown): string {
+  if (!a) return "";
+  if (typeof a === "string") return a;
+  if (typeof a === "object" && a !== null && "src" in (a as any)) return (a as any).src as string;
+  return String(a);
 }
 
-// Arrow icon component for section headers
+/* -------------------- Small SVGs -------------------- */
+
 function UpArrowIcon() {
   return (
     <svg className="w-8 h-8 transform scale-y-[-100%]" fill="none" viewBox="0 0 32 32" aria-hidden>
@@ -83,90 +57,72 @@ function UpArrowIcon() {
   );
 }
 
-// replace your mapBtnClass with:
+/* -------------------- Styles -------------------- */
+
 const mapBtnClass =
   "inline-flex items-center justify-center w-auto max-w-fit px-6 py-3 rounded-md " +
-  "bg-white text-black text-base font-medium " + // solid white, black text
-  "hover:bg-gray-100 active:bg-gray-200 " + // natural hover/active shades
+  "bg-white text-black text-base font-medium " +
+  "hover:bg-gray-100 active:bg-gray-200 " +
   "transition-colors duration-300 ease-in-out";
 
+/* =================================================== */
+/*                   Component                          */
+/* =================================================== */
+
 export default function WeddingInvitation() {
-  // ⬇️ all asset refs now come from /public
+  // All asset refs come from /public
   const ceremonyBgUrl = "/maria.png";
   const receptionBgUrl = "/reception.png";
   const logoUrl = "/sglogo.png";
   const coupleNamesUrl = "/couple-names.svg";
 
-  // start with a random order once
+  /* -------- Hero carousel with preloading -------- */
+
   const [order, setOrder] = useState(() => shuffle([...images]));
   const [idx, setIdx] = useState(0);
+  const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
+  // Preload every image once
+  useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => setLoaded((m) => ({ ...m, [src]: true }));
+    });
+  }, []);
+
+  // Prefetch the next slide
+  useEffect(() => {
+    const next = order[(idx + 1) % order.length];
+    if (!loaded[next]) {
+      const img = new Image();
+      img.src = next;
+      img.onload = () => setLoaded((m) => ({ ...m, [next]: true }));
+    }
+  }, [idx, order, loaded]);
+
+  // Advance only when the next slide is ready (no gray flash)
   useEffect(() => {
     const id = setInterval(() => {
-      setIdx((prev) => {
-        const next = prev + 1;
-        if (next >= order.length) {
-          setOrder(shuffle([...images])); // new random cycle
-          return 0;
-        }
-        return next;
-      });
+      const next = (idx + 1) % order.length;
+      const nextSrc = order[next];
+      if (!loaded[nextSrc]) return; // wait until cached
+      setIdx(next);
     }, 4000);
     return () => clearInterval(id);
-  }, [order.length]);
+  }, [idx, order, loaded]);
 
-  {
-    order.map((src, i) => {
-      const active = i === idx;
-      return active ? (
-        <div
-          key={`${src}-${idx}`}
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none opacity-100 kb-anim transition-opacity duration-700 ease-linear"
-          style={{ backgroundImage: `url(${src})` }}
-          aria-hidden
-        />
-      ) : null;
-    });
-  }
+  /* ----------------- RSVP form state ----------------- */
 
-  // right after your idx/order state:
-const [loaded, setLoaded] = useState<Record<string, boolean>>({});
-
-// load all once (fast networks) OR comment this out if you prefer just-in-time prefetch
-useEffect(() => {
-  images.forEach((src) => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => setLoaded((m) => ({ ...m, [src]: true }));
+  const [formData, setFormData] = useState({
+    name: "",
+    attendMatrimony: false,
+    matrimonyCount: "",
+    attendReception: false,
+    receptionCount: "",
   });
-}, []);
 
-// always prefetch the next slide
-useEffect(() => {
-  const next = order[(idx + 1) % order.length];
-  if (!loaded[next]) {
-    const img = new Image();
-    img.src = next;
-    img.onload = () => setLoaded((m) => ({ ...m, [next]: true }));
-  }
-}, [idx, order, loaded]);
-
-// when rendering slide, only advance when the next is ready
-useEffect(() => {
-  const id = setInterval(() => {
-    const next = (idx + 1) % order.length;
-    const nextSrc = order[next];
-    // if next image isn’t ready yet, skip this tick
-    if (!loaded[nextSrc]) return;
-    setIdx(next);
-  }, 4000);
-  return () => clearInterval(id);
-}, [idx, order, loaded]);
-
-
-  const [formData, setFormData] = useState({ name: "", guests: "" });
-
-  // Netlify encoder
+  // encoder for Netlify
   const encode = (data: Record<string, string>) =>
     Object.keys(data)
       .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
@@ -174,35 +130,80 @@ useEffect(() => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.guests) {
-      toast.error("Please fill in all fields");
+
+    const {
+      name,
+      attendMatrimony,
+      matrimonyCount,
+      attendReception,
+      receptionCount,
+    } = formData;
+
+    // validations per your requirements
+    if (!name.trim()) {
+      toast.error("Please enter your name.");
       return;
     }
+    if (!attendMatrimony && !attendReception) {
+      toast.error("Please select at least one event to attend.");
+      return;
+    }
+    if (attendMatrimony && (!matrimonyCount || Number(matrimonyCount) < 1)) {
+      toast.error("Please enter how many people will attend the Holy Matrimony.");
+      return;
+    }
+    if (attendReception && (!receptionCount || Number(receptionCount) < 1)) {
+      toast.error("Please enter how many people will attend the Reception.");
+      return;
+    }
+
+    // Submit to Netlify
+    const payload = {
+      "form-name": "rsvp",
+      name: name.trim(),
+      attendMatrimony: attendMatrimony ? "Yes" : "No",
+      matrimonyCount: attendMatrimony ? String(matrimonyCount) : "",
+      attendReception: attendReception ? "Yes" : "No",
+      receptionCount: attendReception ? String(receptionCount) : "",
+    };
+
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode({ "form-name": "rsvp", ...formData }),
+      body: encode(payload),
     })
       .then(() => {
         toast.success("Thank you for your RSVP! We can't wait to celebrate with you.");
-        setFormData({ name: "", guests: "" });
+        setFormData({
+          name: "",
+          attendMatrimony: false,
+          matrimonyCount: "",
+          attendReception: false,
+          receptionCount: "",
+        });
       })
       .catch((error) => {
-        toast.error("Something went wrong. Please try again.");
         console.error(error);
+        toast.error("Something went wrong. Please try again.");
       });
   };
 
   return (
     <div className="min-h-screen bg-[#f2f2f2] text-[#444444] scroll-smooth">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Slides */}
-        {order.map((src, i) => {
-          const active = i === idx;
-          if (!active) return null;
+      {/* -------- Hidden registration form for Netlify (ensures form exists at build) -------- */}
+      <form name="rsvp" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true">
+        <input type="text" name="name" />
+        <input type="text" name="attendMatrimony" />
+        <input type="text" name="matrimonyCount" />
+        <input type="text" name="attendReception" />
+        <input type="text" name="receptionCount" />
+      </form>
 
-          return (
+      {/* ======================= Hero ======================= */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Slide (only active rendered) */}
+        {order.map((src, i) =>
+          i === idx ? (
             <div
               key={`${src}-${idx}`}
               className="hero-slide transition-opacity duration-700 ease-linear opacity-100"
@@ -212,10 +213,10 @@ useEffect(() => {
               }}
               aria-hidden
             />
-          );
-        })}
+          ) : null
+        )}
 
-        {/* Dark overlay */}
+        {/* Overlay */}
         <div className="absolute inset-0 bg-black/20 pointer-events-none" aria-hidden />
 
         {/* Logo */}
@@ -274,7 +275,7 @@ useEffect(() => {
         </button>
       </section>
 
-      {/* Locations Section */}
+      {/* ======================= Locations ======================= */}
       <section id="locations" className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -289,7 +290,6 @@ useEffect(() => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 max-w-6xl mx-auto rounded-lg overflow-hidden shadow-lg">
             {/* Ceremony card */}
             <div className="relative h-[400px] md:h-[500px] group">
-              {/* Background */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: ceremonyBgUrl ? `url("${ceremonyBgUrl}")` : undefined }}
@@ -297,35 +297,28 @@ useEffect(() => {
               />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" aria-hidden />
 
-              {/* Content */}
-              <div
-                className="relative z-[1] h-full p-8 md:p-12 lg:p-16
-                          flex flex-col justify-center items-center md:items-start gap-6
-                          text-center md:text-left"
-              >
+              <div className="relative z-[1] h-full p-8 md:p-12 lg:p-16 flex flex-col justify-center items-center md:items-start gap-6 text-center md:text-left">
                 <p
-                  className="text-base md:text-lg lg:text-xl font-regular text-white text-center md:text-right"
-                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+                  className="text-base md:text-lg lg:text-xl text-white"
+                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                >
                   Holy Matrimony
-                  </p>
-                    <h3
-                      className="font-light text-white tracking-tight leading-none"
-                      style={{
-                        fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
-                        fontSize: "clamp(5rem, 12vw, 6rem)",
-                      }}
-                    >
-                      12:00
-                    </h3>
-
-
+                </p>
+                <h3
+                  className="font-light text-white tracking-tight leading-none"
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
+                    fontSize: "clamp(5rem, 12vw, 6rem)",
+                  }}
+                >
+                  12:00
+                </h3>
                 <p
-                  className="text-base md:text-lg lg:text-xl font-semibold text-white text-center md:text-left"
+                  className="text-base md:text-lg lg:text-xl font-semibold text-white"
                   style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
                 >
                   Maria Bunda Karmel Catholic Church
                 </p>
-
                 <a
                   href="https://maps.google.com/?q=Maria+Bunda+Karmel+Church"
                   target="_blank"
@@ -340,7 +333,6 @@ useEffect(() => {
                 </a>
               </div>
 
-              {/* Full-card click target */}
               <a
                 href="https://maps.google.com/?q=Maria+Bunda+Karmel+Church"
                 target="_blank"
@@ -354,7 +346,6 @@ useEffect(() => {
 
             {/* Reception card */}
             <div className="relative h-[400px] md:h-[500px] group">
-              {/* Background */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: receptionBgUrl ? `url("${receptionBgUrl}")` : undefined }}
@@ -362,17 +353,13 @@ useEffect(() => {
               />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" aria-hidden />
 
-              {/* Content */}
-              <div
-                className="relative z-[1] h-full p-8 md:p-12 lg:p-16
-                          flex flex-col justify-center items-center md:items-end gap-6
-                          text-center md:text-right"
-              >
+              <div className="relative z-[1] h-full p-8 md:p-12 lg:p-16 flex flex-col justify-center items-center md:items-end gap-6 text-center md:text-right">
                 <p
-                  className="text-base md:text-lg lg:text-xl font-regular text-white text-center md:text-right"
-                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}>
+                  className="text-base md:text-lg lg:text-xl text-white"
+                  style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                >
                   Wedding Reception
-                  </p>
+                </p>
                 <h3
                   className="font-light text-white leading-none tracking-tight"
                   style={{
@@ -382,14 +369,12 @@ useEffect(() => {
                 >
                   19:00
                 </h3>
-
                 <p
-                  className="text-base md:text-lg lg:text-xl font-semibold text-white text-center md:text-right"
+                  className="text-base md:text-lg lg:text-xl font-semibold text-white"
                   style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
                 >
                   Angke Restaurant Ketapang
                 </p>
-
                 <a
                   href="https://www.google.com/maps/place/Angke+Restaurant+-+Ketapang/@-6.1621017,106.8104843,4452m/data=!3m1!1e3!4m6!3m5!1s0x2e69f6758d7769d5:0x3a72f6d89bf44ba4!8m2!3d-6.1599069!4d106.8167709!16s%2Fg%2F1tsw5cx0?entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D"
                   target="_blank"
@@ -404,7 +389,6 @@ useEffect(() => {
                 </a>
               </div>
 
-              {/* Full-card click target */}
               <a
                 href="https://maps.google.com/?q=Angke+Restaurant+Ketapang"
                 target="_blank"
@@ -419,7 +403,7 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Dress Code Section */}
+      {/* ======================= Dress Code ======================= */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -473,7 +457,7 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* RSVP Form Section */}
+      {/* ======================= RSVP ======================= */}
       <section className="py-16 md:py-24 bg-gray-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -492,6 +476,7 @@ useEffect(() => {
                   RSVP
                 </h3>
               </CardHeader>
+
               <CardContent>
                 <form
                   name="rsvp"
@@ -508,7 +493,7 @@ useEffect(() => {
                     </label>
                   </p>
 
-                  {/* Names */}
+                  {/* Your Name */}
                   <div>
                     <Label
                       htmlFor="name"
@@ -516,16 +501,16 @@ useEffect(() => {
                       style={{
                         fontWeight: 400,
                         fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+                          "'Playfair Display', Georgia, 'Times New Roman', Times, serif",
                       }}
                     >
-                      Your name(s)
+                      Your Name
                     </Label>
                     <Input
                       id="name"
                       name="name"
                       type="text"
-                      placeholder="Type full name(s)"
+                      placeholder="Type your name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full border-0 border-b-2 border-gray-300 mb-6 rounded-lg px-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
@@ -538,37 +523,102 @@ useEffect(() => {
                     />
                   </div>
 
-                  {/* Guest count */}
-                  <div>
+                  {/* Holy Matrimony attendance + count */}
+                  <div className="space-y-12">
                     <Label
-                      htmlFor="guests"
-                      className="text-lg md:text-xl text-[#565656] mb-2 block"
-                      style={{
-                        fontWeight: 400,
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-                      }}
+                      htmlFor="attendMatrimony"
+                      className="text-lg md:text-xl text-[#565656] block mb-2"
+                      style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
                     >
-                      How many people?
+                      Will you attend the Holy Matrimony?
                     </Label>
-                    <Input
-                      id="guests"
-                      name="guests"
-                      type="number"
-                      placeholder="Enter total number of guests"
-                      value={formData.guests}
-                      onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-                      className="w-full border-0 border-b-2 border-gray-300 rounded-lg px-3 mb-8 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
-                      style={{
-                        height: 40,
-                        fontFamily:
-                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-                      }}
-                      inputMode="numeric"
-                      step={1}
-                      min={1}
-                      required
+                    <input
+                      id="attendMatrimony"
+                      name="attendMatrimony"
+                      type="checkbox"
+                      checked={formData.attendMatrimony}
+                      onChange={(e) =>
+                        setFormData((f) => ({
+                          ...f,
+                          attendMatrimony: e.target.checked,
+                          matrimonyCount: e.target.checked ? f.matrimonyCount : "",
+                        }))
+                      }
+                      className="h-5 w-5 accent-black cursor-pointer mb-8"
                     />
+
+                    {formData.attendMatrimony && (
+                      <div className="pt-2">
+                        <Label
+                          htmlFor="matrimonyCount"
+                          className="text-lg md:text-xl text-[#565656] mb-2 block"
+                          style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                        >
+                          How many people will attend Holy Matrimony?
+                        </Label>
+                        <Input
+                          id="matrimonyCount"
+                          name="matrimonyCount"
+                          type="number"
+                          placeholder="Enter amount"
+                          value={formData.matrimonyCount}
+                          onChange={(e) => setFormData({ ...formData, matrimonyCount: e.target.value })}
+                          className="w-full mb-8 border-0 border-b-2 border-gray-300 rounded-lg px-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
+                          style={{ height: 40 }}
+                          inputMode="numeric"
+                          min={1}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Reception attendance + count */}
+                  <div className="space-y-3">
+                    <Label
+                      htmlFor="attendReception"
+                      className="text-lg md:text-xl text-[#565656] block mb-2"
+                      style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                    >
+                      Will you attend the Reception?
+                    </Label>
+                    <input
+                      id="attendReception"
+                      name="attendReception"
+                      type="checkbox"
+                      checked={formData.attendReception}
+                      onChange={(e) =>
+                        setFormData((f) => ({
+                          ...f,
+                          attendReception: e.target.checked,
+                          receptionCount: e.target.checked ? f.receptionCount : "",
+                        }))
+                      }
+                      className="h-5 w-5 mb-8 accent-black cursor-pointer"
+                    />
+
+                    {formData.attendReception && (
+                      <div className="pt-2">
+                        <Label
+                          htmlFor="receptionCount"
+                          className="text-lg md:text-xl text-[#565656] mb-2 block"
+                          style={{ fontFamily: "'Playfair Display', Georgia, 'Times New Roman', Times, serif" }}
+                        >
+                          How many people will attend the Reception?
+                        </Label>
+                        <Input
+                          id="receptionCount"
+                          name="receptionCount"
+                          type="number"
+                          placeholder="Enter amount"
+                          value={formData.receptionCount}
+                          onChange={(e) => setFormData({ ...formData, receptionCount: e.target.value })}
+                          className="w-full border-0 mb-8 border-b-2 border-gray-300 rounded-lg px-3 text-base focus:border-zinc-600 focus-visible:ring-0 transition-colors"
+                          style={{ height: 40 }}
+                          inputMode="numeric"
+                          min={1}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   {/* Submit */}
