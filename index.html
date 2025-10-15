@@ -1,31 +1,16 @@
-
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Wedding of Sam and Gracia</title>
-    </head>
-
-  <body>
-    <div id="root"></div>
-
-    <!-- Netlify will detect this -->
-    <form name="rsvp" netlify netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="rsvp" />
-    <input type="text" name="name" />
-    <input type="number" name="guests" />
-    <input type="text" name="attending" />
-    <input name="bot-field" />
-    </form>
-
-  <!-- This comment keeps Netlify from stripping it -->
-  <!-- This form is here for Netlify bot detection -->
-  <!-- /Netlify -->
-  
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-
-
-  </html>
-  
+<!-- Netlify will detect this -->
+<form
+  name="rsvp-2025"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  hidden
+>
+  <input type="hidden" name="form-name" value="rsvp-2025" />
+  <input type="text" name="name" />
+  <input type="text" name="attendMatrimony" />
+  <input type="text" name="matrimonyCount" />
+  <input type="text" name="attendReception" />
+  <input type="text" name="receptionCount" />
+  <input name="bot-field" />
+</form>
